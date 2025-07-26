@@ -1,0 +1,63 @@
+# Conways Game Of Life
+
+import random, time, copy, os
+
+WIDTH = 60
+HEIGHT = 20
+
+# Create a list of the cells
+Next_Cells = []
+for x in range(WIDTH):    # This creates a blank line 60 characters long
+    column = []
+    for y in range(HEIGHT): # This repeats that process 20 times, effectively creating a 60x20 grid
+        if random.randint(0, 1) == 0:
+            column.append('#') # This adds a living cell (#) to the list named 'column'
+        else:
+            column.append(' ') # add dead cell
+    Next_Cells.append(column) # Next_Cells is a list of column lists
+
+while True:
+    os.system('cls' if os.name == 'nt' else 'clear')  # Clears the screen
+
+    print('\n\n\n\n\n')  # just adds vertical space
+    Current_Cells = copy.deepcopy(Next_Cells)
+    
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            print(Current_Cells[x][y], end=' ')  # Prints each cell with space between
+        print()  # Newline after each row
+
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            Left = (x -1) % WIDTH  # here x simply applies to any/all members of any given line
+            Right = (x +1) % WIDTH # and defines these key words for later
+            Up = (y -1) % HEIGHT
+            Down = (y +1) % HEIGHT  # fixed typo from HEIGH to HEIGHT
+
+            Num_Neighbours = 0
+            if Current_Cells[Left][Up] == '#':
+                Num_Neighbours += 1  # checks top left 
+            if Current_Cells[x][Up] == '#':
+                Num_Neighbours += 1  # checks above 
+            if Current_Cells[Right][Up] == '#':
+                Num_Neighbours += 1  # checks top right 
+            if Current_Cells[Left][y] == '#':
+                Num_Neighbours += 1  # checks left
+            if Current_Cells[Right][y] == '#':
+                Num_Neighbours += 1  # checks right
+            if Current_Cells[Left][Down] == '#':
+                Num_Neighbours += 1  # checks bottom left
+            if Current_Cells[x][Down] == '#':
+                Num_Neighbours += 1  # checks below
+            if Current_Cells[Right][Down] == '#':
+                Num_Neighbours += 1  # checks bottom right
+
+            # Apply the rules of Conway's Game of Life:
+            if Current_Cells[x][y] == '#' and (Num_Neighbours == 2 or Num_Neighbours == 3):
+                Next_Cells[x][y] = '#'  # stays alive
+            elif Current_Cells[x][y] == ' ' and Num_Neighbours == 3:
+                Next_Cells[x][y] = '#'  # comes to life
+            else:
+                Next_Cells[x][y] = ' '  # dies or stays dead
+
+    time.sleep(1)  # delays the next frame
