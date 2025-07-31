@@ -1,0 +1,45 @@
+import random
+
+
+
+def Flipz(HowMany):  #This generates our randomised list of flip results. (InsertArgumentHere)
+    flips = []                    # Blank list
+    for _ in range(HowMany):            
+        if random.randint(0, 1) == 0:  # Creates 50/50 chance
+            flips.append('H')
+        else:
+            flips.append('T')
+    return flips                       # Saves flips value
+
+def Detect(flips):
+    StreakH = 'H' * 6
+    StreakT = 'T' * 6
+    result = ''.join(flips) # <---Important: If what you are trying to do won't work -
+    streak = 0              # you dont have to alter the original list, just create a variable -
+    if StreakT in result:   # to MAKE it work.
+        streak += 1
+    if StreakH in result:
+        streak += 1
+    return streak
+
+# How many trials?
+num_trials = 1000
+# Number of flips per trial
+flips_per_trial = 100
+
+# Count how many trials contain at least one streak
+streaks_found = 0
+
+for trial in range(num_trials):
+    flips = Flipz(flips_per_trial)
+    streak_count = Detect(flips)
+    if streak_count > 0:
+        streaks_found += 1
+
+print("Out of", num_trials, "trials,")
+print(streaks_found, "contained a streak of 6 heads or tails.")
+print("That's about", streaks_found / num_trials * 100, "% of the time.")
+print(' ')
+print(streaks_found)
+print(num_trials)
+print(flips)
